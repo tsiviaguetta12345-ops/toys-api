@@ -12,6 +12,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Make sure MongoDB is connected before handling a request
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("Could not connect to MongoDB:", err.message);
+    res.status(500).json({ error: "Database connection failed" });
+  }
+});
+
 routesInit(app);
 
 // Unknown routes
@@ -28,15 +39,18 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: "Server error, try again later" });
 });
 
-const PORT = process.env.PORT || 3001;
-
-connectDB()
-  .then(() => {
-    app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
-  })
-  .catch((err) => {
-    console.error("Could not connect to MongoDB:", err.message);
-    process.exit(1);
-  });
+// On Vercel the app is exported and Vercel runs it.
+// On the computer we start the server ourselves.
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3001;
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+    })
+    .catch((err) => {
+      console.error("Could not connect to MongoDB:", err.message);
+      process.exit(1);
+    });
+}
 
 module.exports = app;
