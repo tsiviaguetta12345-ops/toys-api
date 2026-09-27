@@ -1,0 +1,25 @@
+{
+  "name": "toys-api",
+  "version": "1.0.0",
+  "description": "REST API for a toys store - NodeJS + MongoDB project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "seed": "node seed.js"
+  },
+  "author": "Tsivia Guetta (348248634)",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.4",
+    "express": "^4.22.3",
+    "joi": "^18.2.9",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.10.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
